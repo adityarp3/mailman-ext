@@ -28,6 +28,7 @@ wheels/
 
 # Backend sensitive files
 backend/credentials.json
+backend/c-wa.json
 backend/token.pickle
 backend/.env
 *.pickle
