@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 450px;
+      max-height: 600px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .header {
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0 0 5px 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .content {
+      background: white;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .email-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-left: 4px solid;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .email-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .email-card.priority-high {
+      border-left-color: #e74c3c;
+      background: #fff5f5;
+    }
+
+    .email-card.priority-medium {
+      border-left-color: #f39c12;
+      background: #fffbf5;
+    }
+
+    .email-card.priority-low {
+      border-left-color: #3498db;
+      background: #f5f9ff;
+    }
+
+    .priority-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .priority-high .priority-badge {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .priority-medium .priority-badge {
+      background: #f39c12;
+      color: white;
+    }
+
+    .priority-low .priority-badge {
+      background: #3498db;
+      color: white;
+    }
+
+    .email-subject {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .email-sender {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-bottom: 8px;
+    }
+
+    .email-summary {
+      font-size: 13px;
+      color: #34495e;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .email-reason {
+      font-size: 11px;
+      color: #95a5a6;
+      font-style: italic;
+    }
+
+    .refresh-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+
+    .refresh-btn:hover {
+      opacity: 0.9;
+    }
+
+    .refresh-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .no-emails {
+      text-align: center;
+      padding: 40px 20px;
+      color: #7f8c8d;
+    }
+
+    .no-emails svg {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    .error {
+      background: #ffe6e6;
+      color: #c0392b;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 13px;
+    }
+
+    .chat-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #e0e0e0;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .chat-header svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+
+    .chat-messages {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .chat-messages.active {
+      display: block;
+    }
+
+    .chat-message {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .chat-message.user {
+      background: #667eea;
+      color: white;
+      margin-left: 20px;
+    }
+
+    .chat-message.assistant {
+      background: white;
+      color: #2c3e50;
+      margin-right: 20px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .chat-send-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .chat-send-btn:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    .chat-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .suggested-questions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .suggested-question {
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border: 1px solid #d0d0d0;
+      border-radius: 16px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .suggested-question:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Mailman</h1>
+    <p>Personal Email AI Assistant.</p>
+  </div>
+
+  <div class="content">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Analyzing your emails...</p>
+    </div>
+
+    <div id="emails" style="display: none;"></div>
+    
+    <button id="refreshBtn" class="refresh-btn" style="display: none;">
+      Refresh Emails
+    </button>
+
+    <div id="chatSection" class="chat-section" style="display: none;">
+      <div class="chat-header">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        Ask about your emails
+      </div>
+
+      <div id="suggestedQuestions" class="suggested-questions">
+        <div class="suggested-question" data-question="Which emails need urgent action?">⚡ Urgent emails?</div>
+        <div class="suggested-question" data-question="Summarize all emails from my teacher">👨‍🏫 Teacher emails</div>
+        <div class="suggested-question" data-question="Are there any deadlines I should know about?">📅 Deadlines?</div>
+        <div class="suggested-question" data-question="What's the most important email?">🎯 Most important?</div>
+      </div>
+
+      <div id="chatMessages" class="chat-messages"></div>
+
+      <div class="chat-input-container">
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="chat-input" 
+          placeholder="Ask anything about your emails..."
+          disabled
+        >
+        <button id="chatSendBtn" class="chat-send-btn" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

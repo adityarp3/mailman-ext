@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "mailman-ext",
+  "version": "0.0.1",
+  "description": "AI-powered email summarization and prioritization",
+  "permissions": [
+    "storage",
+    "identity" 
+  ],
+  "host_permissions": [
+    "http://localhost:5000/*"
+  ],
+  
+  "oauth2": {
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.readonly" 
+    ]
+  },
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.ico",
+      "48": "icons/icon48.ico",
+      "128": "icons/icon128.ico"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.ico",
+    "48": "icons/icon48.ico",
+    "128": "icons/icon128.ico"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
